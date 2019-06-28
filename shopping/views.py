@@ -4,14 +4,17 @@ from django.urls import reverse
 from .models import Product, ProductCategory
 
 def index(request):
-    all_added_products = Product.objects.filter(product_added=True)
+    all_added_products = Product.objects.all()
     context = {'all_added_products': all_added_products}
     return render(request, 'shopping/index.html', context)
 
-
-def detail(request, product_id):
+def product_details(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
-    return render(request, 'shopping/detail.html', {'product': product})
+    return render(request, 'shopping/product_details.html', {'product': product})
+
+def change_category_form(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+    return render(request, 'shopping/change_category.html', {'product': product})
 
 def change_category(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
@@ -19,7 +22,7 @@ def change_category(request, product_id):
         new_category = ProductCategory.objects.filter(pk=request.POST['category'])
     except (KeyError, Product.DoesNotExist):
         # Redisplay the question voting form.
-        return render(request, 'shopping/detail.html', {
+        return render(request, 'shopping/change_category.html', {
             'product': product,
             'error_message': "You didn't select a category.",
         })
@@ -31,7 +34,3 @@ def change_category(request, product_id):
         # user hits the Back button.
         return HttpResponseRedirect(reverse('shopping:product_details', args=(product.id)))
 
-def product_details(request, product_id):
-    product = get_object_or_404(Product, pk=product_id)
-    return render(request, 'shopping/product_details.html', {'product': product})
-    # return HttpResponse(str('Shite'))

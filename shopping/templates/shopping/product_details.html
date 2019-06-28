@@ -1,8 +1,8 @@
 <h1>{{ product.product_name }}</h1>
 
 <ul>
-    <li>{{ product.product_category_code }}</li>
-    <li>{{ product.product_added }}</li>
+    <li>Category: {{ product.product_category_code }}</li>
+    <li>Added: {{ product.product_added }}</li>
 </ul>
 
 <a href="{% url 'shopping:change_category' product.id %}">Change Category</a>
